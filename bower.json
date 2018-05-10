@@ -1,0 +1,21 @@
+{
+  "name": "webproject",
+  "authors": [
+    "garden <mojiayong@outlook.com>"
+  ],
+  "description": "This is the Web project integrated by WebProject",
+  "main": "html",
+  "keywords": [
+    "Web",
+    "Frameword"
+  ],
+  "license": "SCU",
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

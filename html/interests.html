@@ -1,0 +1,177 @@
+<div class="container">
+    <div class="form-horizontal">
+        <ul class="nav nav-tabs">
+             <!--<li role="presentation" ng-class="{'userinfo':'active','running':'','dashboadr':''}[configureType]"><a ng-click="configureSwitch('userinfo')" class="text-info" role="tab">用户注册</a></li>-->
+            <li role="presentation" ng-class="{'userinfo':'active','running':''}[configureType]"><a ng-click="configureSwitch('userinfo')" class="text-info" role="tab">已关注的人</a></li>
+            <li role="presentation" ng-class="{'userinfo':'','running':'active'}[configureType]"><a ng-click="configureSwitch('running')" class="text-info" role="tab">增加关注</a></li>
+            <!--<li role="presentation" ng-class="{'userinfo':' ','running':'active','dashboard':''}[configureType]"><a ng-click="configureSwitch('running')" class="text-info" role="tab">账号绑定</a></li>-->
+            <!-- <li role="presentation" ng-class="{'userinfo':'','running':'','dashboard':'active'}[configureType]"><a ng-click="configureSwitch('dashboard')" class="text-info" role="tab">Dash Board配置</a></li> -->
+        </ul>
+        <div ng-switch="configureType">
+             <div class="row"  ng-switch-when="userinfo">
+                <h3 class="text-info text-center">我的关注列表</h3>
+                <hr class="content-divider">
+                 <div class="col-md-3 animated fadeInRight" ng-repeat="people in interestList" >
+                     <div class="thumbnail">
+                         <!--<img style="cursor: pointer" ng-click="showLiveDetailMoal(item.liveId)" ng-srcset="{{item.src}}">-->
+                         <hr class="button-divider">
+                         <div class="caption">
+                             <h3 class="text-center">关注的人</h3>
+                             <p>姓名：<span class="pull-right">{{people.name}}</span></p>
+                             <P>ID:<span class="pull-right">{{people.id}}</span></P>
+                             <hr class="button-divider">
+                             <p ><button class="btn btn-block btn-success animated fadeIn" ng-click="deleteInterest(people.id)">移出我的关注</button> </p>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+
+            <div class="row"  ng-switch-when="running">
+                <h3 class="text-info text-center">添加关注</h3>
+                <hr class="content-divider">
+                <div class="form-group">
+                    <label for="userName" class="col-sm-2 control-label">姓名</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="userName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id" class="col-sm-2 control-label">用户名</label>
+                    <div class="col-sm-10">
+                        <!--<input disabled type="email" class="form-control" id="username3" placeholder="Username">-->
+                        <input type="email" class="form-control" id="id">
+                    </div>
+                </div>
+                <!--<div class="form-group">
+                    <label for="ID" class="col-sm-2 control-label">用户ID</label>
+                    <div class="col-sm-10">
+                        <input type="text"  class="form-control" id="ID" placeholder="ID">
+                    </div>
+                </div>-->
+                <!--<div class="form-group">
+                    <label for="repeatNewPassword3" class="col-sm-2 control-label">重复新密码</label>
+                    <div class="col-sm-10">
+                        <input type="password"  class="form-control" id="repeatNewPassword3" placeholder="Password">
+                    </div>
+                </div>-->
+                <hr class="content-divider">
+                <button type="submit" class="btn btn-block btn-success" ng-click="addInterest()">添加</button>
+            </div>
+
+            <!--<div class="row" ng-switch-when="running">-->
+                <!--<h3 class="text-primary text-center" >运行配置</h3>-->
+                <!--<div class="whitebox">-->
+                    <!--<h3>自定义敏感关键词库：</h3>-->
+                    <!--<div style="margin-top:10px;">-->
+                        <!--<span  ng-repeat="item in sensitiveKeyword" ng-click="deleteKeyword1($index)" class="label l-cursor label-danger animated flipInX">{{item}}<i style="margin-left: 5px">&times;</i></span>-->
+                        <!--<hr class="content-divider">-->
+                        <!--<div class="input-group">-->
+                            <!--<input  id="keyword1"  type="text" class="form-control" aria-label="label-info">-->
+                            <!--<div class="input-group-btn">-->
+                                <!--<button ng-click="addInterest()" type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i>增加</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<h3>自定义直播平台库：</h3>-->
+                    <!--<div style="margin-top:10px;">-->
+                        <!--<span ng-repeat="item in platform" ng-click="deletePlatformValue($index)" class="label l-cursor label-primary animated rollIn">{{item}}<i style="margin-left: 5px">&times;</i></span>-->
+                    <!--</div>-->
+                    <!--<hr class="content-divider">-->
+                    <!--<div class="input-group">-->
+                        <!--<input id="platformValue" type="text" class="form-control" aria-label="label-info">-->
+                        <!--<div class="input-group-btn">-->
+                            <!--<button ng-click="addPlatformword()" type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i>增加</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<h3>自定义DHT网络信任结点库：</h3>-->
+                    <!--<div style="margin-top:10px;">-->
+                        <!--<span ng-repeat="item in trustfulDhtNode" ng-click="deletedhtValue($index)" class="label l-cursor  label-success animated rollIn">{{item}}<i style="margin-left: 5px">&times;</i></span>-->
+                    <!--</div>-->
+                    <!--<hr class="content-divider">-->
+                    <!--<div class="input-group">-->
+                        <!--<input  id="dhtnodeValue" type="text" class="form-control" aria-label="label-info">-->
+                        <!--<div class="input-group-btn">-->
+                            <!--<button ng-click="addDHTNode()" type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i>增加</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<h3>用户邮箱库：</h3>-->
+                    <!--<div style="margin-top:10px;">-->
+                        <!--<span ng-repeat="item in emailList" ng-click="deleteEmail($index)" class="label l-cursor label-info animated rollIn">{{item}}<i style="margin-left: 5px">&times;</i></span>-->
+                    <!--</div>-->
+                    <!--<hr class="content-divider">-->
+                    <!--<div class="input-group">-->
+                        <!--<input id="emailValue" type="text"  class="form-control" aria-label="label-info">-->
+                        <!--<div class="input-group-btn">-->
+                            <!--<button ng-click="addEmail()" type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i>增加</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <!--</div>-->
+            <!--<div class="row " ng-switch-when="dashboard">-->
+                <!--<h3 class="text-primary text-center">Dash Board配置</h3>-->
+                <!--<div class="col-md-6">-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="checkbox2" class="col-sm-6 control-label"><h4>实时资源分析</h4></label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="checkbox" id="checkbox2" name="my-checkbox"   >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="checkbox3" class="col-sm-6 control-label"><h4>报表导出</h4></label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="checkbox" id="checkbox3" name="my-checkbox" >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="checkbox8" class="col-sm-6 control-label"><h4>用户设置</h4></label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="checkbox" id="checkbox8" name="my-checkbox" >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="checkbox5" class="col-sm-6 control-label"><h4>系统设置</h4></label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="checkbox" id="checkbox5" name="my-checkbox" >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-6">-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="checkbox4" class="col-sm-6 control-label"><h4>资源屏蔽</h4></label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="checkbox" id="checkbox4" name="my-checkbox" >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="checkbox1" class="col-sm-6 control-label"><h4>结点屏蔽</h4></label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="checkbox" id="checkbox1" name="my-checkbox" >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="checkbox7" class="col-sm-6 control-label"><h4>屏蔽历史</h4></label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="checkbox" id="checkbox7" name="my-checkbox" >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="checkbox6" class="col-sm-6 control-label"><h4>不良节点屏蔽信息</h4></label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="checkbox" id="checkbox6" name="my-checkbox" >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+<script>
+    $.fn.bootstrapSwitch.defaults.size = 'large';
+    $.fn.bootstrapSwitch.defaults.offColor = 'danger';
+    $.fn.bootstrapSwitch.defaults.onColor = 'success';
+    $("[name='my-checkbox']").bootstrapSwitch();
+</script>
+<script type="text/javascript">
+    $(".text-info").click();
+</script>

@@ -1,0 +1,13 @@
+table>thead>tr>td{
+    color: #00b3ee;
+    font-size: 18px;
+    font-weight: bold;
+}
+table>tbody>tr>td{
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+.searchbar{
+    margin-top: 20px;
+}

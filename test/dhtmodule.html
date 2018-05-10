@@ -1,0 +1,225 @@
+<div class="container"></div><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DHT Module</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="This is the project from Stroy Book.">
+    <meta name="author" content="Jiayong Mo">
+    <link rel="icon" type="image/x-icon" href="../images/shield_32px_1199997_easyicon.net.ico">
+    <link rel="stylesheet" type="text/css" href="../css/animate.css">
+    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script  src="../bower_components/echarts/dist/echarts.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/dhtmodulestyle.css">
+</head>
+<body>
+<div ng-app="dhtmodule" ng-controller="dhtController">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Navbar Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><strong>Net Defender</strong></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="../html/mainpage.html"><span class="glyphicon glyphicon-home"></span></a></li>
+                    <li><a href="#">Net Shield</a></li>
+                    <li><a>Net Tracker</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right notshow" ng-class="{true:'animated fadeIn',false:'notshow'}[logresponse]">
+                    <li>
+                        <form class="navbar-form navbar-right">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button>
+                        </form>
+                    </li>
+                    <li class="dropdown ">
+                        <a href="#" class="dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><strong>Good Morning:Jack</strong><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Message<span class="badge pull-right">3</span></a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a class="bg-danger" ng-click="logout()" href="#">Sign Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-right" ng-class="{false:'animated fadeIn',true:'notshow'}[logresponse]">
+                    <div class="form-group">
+                        <input type="email" placeholder="Email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" class="form-control">
+                    </div>
+                    <button type="submit" ng-click="login()" class="btn btn-success">Sign in</button>
+                    <button type="button" class="btn btn-primary">Sign up</button>
+                </form>
+            </div>
+
+        </div>
+    </nav>
+    <div class="container">
+        <hr class="featurette-divider">
+        <div class="row">
+            <div class="col-md-2">
+                <h3 style="text-align: center">Top Five Rank:<p>(Last 30 minutes:)</p></h3>
+            </div>
+            <div class="col-md-2">
+                <img class="img-responsive center-block" alt="United State" src="../images/country/united_states_of_america_64px_1203560_easyicon.net.png"/>
+            </div>
+            <div class="col-md-2">
+                <img class="img-responsive center-block" alt="China" src="../images/country/china_64px_1203190_easyicon.net.png"/>
+            </div>
+            <div class="col-md-2">
+                <img class="img-responsive center-block" alt="United Kingdom" src="../images/country/united_kingdom_64px_1203558_easyicon.net.png"/>
+            </div>
+            <div class="col-md-2">
+                <img class="img-responsive center-block" alt="Canada" src="../images/country/canada_64px_1203182_easyicon.net.png"/>
+            </div>
+            <div class="col-md-2">
+                <img class="img-responsive center-block" alt="France" src="../images/country/france_64px_1203221_easyicon.net.png"/>
+            </div>
+        </div>
+        <div style="margin-top: 100px" class="row overview">
+            <div class="col-md-6">
+                <div class="center-block" style="width: 500px;height: 500px" id="echart2"></div>
+            </div>
+            <div class="col-md-6">
+                <form class="searchbar">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary">Help?</button>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit">Go!</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </form>
+                <table  class="table text-center table-hover">
+                    <caption class="text-center text-capitalize"><h3>DHT INF Table</h3></caption>
+                    <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>First Name</td>
+                        <td>Last Name</td>
+                        <td>Post Code</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="text-primary">1</td>
+                        <td>Tanmay</td>
+                        <td>Bangalore</td>
+                        <td>560001</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary">2</td>
+                        <td>Tanmay</td>
+                        <td>Bangalore</td>
+                        <td>560001</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary">3</td>
+                        <td>Tanmay</td>
+                        <td>Bangalore</td>
+                        <td>560001</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div aria-label="Page">
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--DHT Page Info-->
+    <hr class="featurette-divider">
+    <a href="#" class="backtotop pull-right"><img src="../images/arrow_top_27.967828418231px_1187790_easyicon.net.png"></a>
+    <footer>
+        <address >
+            <strong>Net Defender, Inc.</strong>
+            <br /> 001 ,part2,ChuanDa Road<br /> Sichuan Chengdu, CN 625100<br />
+            <abbr title="Phone">P:</abbr>
+            (123) 456-7890
+        </address>
+        <p>
+            Copyright by: Jiayong Mo
+        </p>
+    </footer>
+</div>
+</body>
+<script src="../js/world.js"></script>
+<script src="../js/charthelper/map.js"></script>
+</html>

@@ -1,0 +1,209 @@
+<hr class="button-divider-divider">
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      <h3 style="text-align: center">前五危险资源国家:<p>(最近30分钟数据)</p></h3>
+    </div>
+    <div class="col-md-2 animated rollIn">
+      <img class="img-responsive center-block" alt="UChina" src="../images/country/china_64px_1203190_easyicon.net.png" />
+      <div class="countryRank"></div>
+    </div>
+    <div class="col-md-2 animated rollIn">
+      <img class="img-responsive center-block" alt="United State" src="../images/country/united_states_of_america_64px_1203560_easyicon.net.png" />
+      <div class="countryRank"></div>
+    </div>
+    <div class="col-md-2 animated rollIn">
+      <img class="img-responsive center-block" alt="United Kingdom" src="../images/country/united_kingdom_64px_1203558_easyicon.net.png" />
+      <div class="countryRank"></div>
+    </div>
+    <div class="col-md-2 animated rollIn">
+      <img class="img-responsive center-block" alt="Canada" src="../images/country/canada_64px_1203182_easyicon.net.png" />
+      <div class="countryRank"></div>
+    </div>
+    <div class="col-md-2 animated rollIn">
+      <img class="img-responsive center-block" alt="France" src="../images/country/france_64px_1203221_easyicon.net.png" />
+      <div class="countryRank"></div>
+    </div>
+  </div>
+  <div style="margin-top: 100px" class="row overview">
+    <div class="col-md-6">
+      <ul class="nav nav-tabs">
+        <li role="presentation" ng-class="{'china':'active','world':''}[mapTypeFlag]"><a ng-click="mapSwitch('china')" class="text-info" role="tab">中国</a></li>
+        <!-- <li role="presentation" ng-class="{'china':'','world':'active'}[mapTypeFlag]"><a ng-click="mapSwitch('world')" class="text-info" role="tab">世界地图</a></li> -->
+      </ul>
+      <div ng-switch="mapTypeFlag">
+        <div ng-switch-when="china">
+          <div class="center-block animated fadeIn" style="width: 500px;height: 500px" id="echart2"></div>
+          <script src="../bower_components/echarts/map/js/china.js"></script>
+          <script src="../js/charthelper/map.js"></script>
+        </div>
+        <div ng-switch-when="world">
+          <div class="center-block animated fadeIn" style="width: 500px;height: 500px" id="echart3"></div>
+          <script src="../bower_components/echarts/map/js/world.js"></script>
+          <script src="../js/charthelper/map2.js"></script>
+        </div>
+      </div>
+      <!-- Modal -->
+      <div class="modal  fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">四川省 成都市</h4>
+            </div>
+            <div class="modal-body">
+              <div class="center-block" style="width: 800px;height: 800px" id="echart4"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" class="btn btn-primary">屏蔽所有不良节点</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 whitebox animated fadeInRight">
+      <!-- <form class="searchbar">
+        <div class="input-group">
+          <span class="input-group-btn">
+                                     <button type="button" class="btn btn-primary">Help?</button>
+                                     </span>
+          <input type="text" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+                                        <button class="btn btn-success" type="submit">Go!</button>
+                                    </span>
+        </div>
+      </form> -->
+      <table class="table text-center table-hover">
+        <caption class="text-center text-danger">
+          <h3>DHT敏感节点列表</h3></caption>
+        <thead>
+          <tr>
+            <td>#</td>
+            <td>源地址</td>
+            <td>归属地</td>
+            <td>不良资源数目</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-primary">1</td>
+            <td>119.97.183.208</td>
+            <td>湖北省武汉市 电信</td>
+            <td>100</td>
+            <td>
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                操作 <span class="caret"></span>
+                            </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">查看概况</a></li>
+                  <li><a href="#">资源屏蔽</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">封锁源节点</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-primary">2</td>
+            <td>114.117.194.0</td>
+            <td>广东省深圳市 长城宽带</td>
+            <td>98</td>
+            <td>
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                操作 <span class="caret"></span>
+                            </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">查看概况</a></li>
+                  <li><a href="#">资源屏蔽</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">封锁源节点</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-primary">3</td>
+            <td>115.174.164.71</td>
+            <td>上海市上海市 长城宽带</td>
+            <td>67</td>
+            <td>
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                操作 <span class="caret"></span>
+                            </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">查看概况</a></li>
+                  <li><a href="#">资源屏蔽</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">封锁源节点</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <div aria-label="Page">
+        <ul class="pagination">
+          <li>
+            <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+          </li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li>
+            <a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+          </li>
+        </ul>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<!--<script src="../js/charthelper/mychart.js"></script>-->
+
+<script src="../js/charthelper/dotmap.js"></script>
+
+<script type="text/javascript">
+  main.fun.countryRankinit = function(e) {
+    return '<ul class="list-group"><li class="list-group-item">资源数：' +
+      e.resourse + '个</li><li class="list-group-item">色情资源：' + e.sexy + '个</li><li class="list-group-item">暴恐资源：' + e.violet + '个</li><li class="list-group-item">政治敏感资源：' + e.policy + '个</li><li class="list-group-item">纯净度：' + e.pure() +
+      '%</li></ul>';
+  };
+  $(document).ready(function() {
+    main.fun.loadstart();
+    $.ajax({
+      url: main.data.url + 'countryRank/',
+      success: function(e) {
+        main.data.countryRank = [];
+        for (var index in e) {
+          if (e.hasOwnProperty(index)) {
+            main.data.countryRank.push({pure: main.fun.pureRant});
+            main.data.countryRank[index].resourse = parseInt(e[index].resourse);
+            main.data.countryRank[index].policy = parseInt(e[index].policy);
+            main.data.countryRank[index].sexy = parseInt(e[index].sexy);
+            main.data.countryRank[index].violet = parseInt(e[index].violet);
+            main.data.countryRank[index].name = e.name;
+          }
+        }
+        for (var index in main.data.countryRank) {
+          if (main.data.countryRank.hasOwnProperty(index)) {
+            $($(".countryRank")[index]).html(main.fun.countryRankinit(main.data.countryRank[index]));
+          }
+        }
+        main.fun.loadend();
+      },
+      error: function(e) {
+        console.log(e);
+      }
+    });
+  });
+</script>

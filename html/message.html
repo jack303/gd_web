@@ -1,0 +1,47 @@
+<!--实时模块-->
+<div>
+    <h3 class="text-center"><strong>最新信息列表</strong></h3>
+    <hr class="content-divider">
+    <div class="container">
+        <hr class="content-divider">
+        <!--Main Resourece Content-->
+        <div class="row">
+            <div class="media-list">
+                <div class="media"
+                     ng-repeat="item in messageList">
+                    <div class="media-body">
+                        <p>时间：{{item.time}}</p>
+                        <P>内容：{{item.content}}</P>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<button id="refreshResourceRecordByTime" ng-click="refreshResourceRecordByTime()" style="display:none"></button>
+<center>
+    <button class="btn btn-default btn-success animated fadeIn" id="last" ng-click="getLastPage()">上一页</button>
+    <button class="btn btn-default btn-success animated fadeIn" id="next" ng-click="getNextPage()">下一页</button>
+</center>
+
+<script type="text/javascript">
+    /*setInterval(function () {
+        $("#refreshResourceRecordByTime").click();
+    }, 5000);*/
+</script>
+
+<script type="text/javascript">
+    /*setTimeout(function () {
+        $("#liveAnimate").click();
+    }, 5000);
+    setInterval(function () {
+        var imgs = $("img.rollimage");
+        for (var index in imgs) {
+            if (imgs.hasOwnProperty(index)) {
+                $(imgs[index]).attr("srcset", main.data.img[index].imageCharacter[Math.floor(Math.random() * (main.data.img[index].imageCharacter.length))]);
+                if (index < 3) $(imgs[index]).css("height", "200px");
+            }
+        }
+    }, 2000);*/
+</script>

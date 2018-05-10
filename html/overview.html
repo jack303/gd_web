@@ -1,0 +1,523 @@
+<!--概况模块-->
+<div class="container">
+
+    <div id="map-container" style="height: 1000%">
+        <!--<div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="map-container">
+              </div>
+            </div>
+          </div>
+        </div>-->
+    </div>
+</div>
+<div id="myPageTop">
+    <table>
+        <tr>
+            <td>
+                <label>按用户名搜索：</label>
+            </td>
+            <td class="column2">
+                <label>左击获取经纬度：</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" placeholder="请输入关键字进行搜索" id="tipinput">
+            </td>
+            <td class="column2">
+                <input type="text" readonly="true" id="lnglat">
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!--<script type="text/javascript">-->
+<!--//创建地图-->
+<!--var map = new AMap.Map('container', {-->
+<!--zoom: 4-->
+<!--});-->
+
+<!--AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function(PathSimplifier, $) {-->
+
+<!--if (!PathSimplifier.supportCanvas) {-->
+<!--alert('当前环境不支持 Canvas！');-->
+<!--return;-->
+<!--}-->
+
+<!--var pathSimplifierIns = new PathSimplifier({-->
+<!--zIndex: 100,-->
+<!--//autoSetFitView:false,-->
+<!--map: map, //所属的地图实例-->
+
+<!--getPath: function(pathData, pathIndex) {-->
+
+<!--return pathData.path;-->
+<!--},-->
+<!--getHoverTitle: function(pathData, pathIndex, pointIndex) {-->
+
+<!--if (pointIndex >= 0) {-->
+<!--//point-->
+<!--return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;-->
+<!--}-->
+
+<!--return pathData.name + '，点数量' + pathData.path.length;-->
+<!--},-->
+<!--renderOptions: {-->
+
+<!--renderAllPointsIfNumberBelow: 100 //绘制路线节点，如不需要可设置为-1-->
+<!--}-->
+<!--});-->
+
+<!--window.pathSimplifierIns = pathSimplifierIns;-->
+
+<!--//设置数据-->
+<!--pathSimplifierIns.setData([{-->
+<!--name: '路线0',-->
+<!--path: [-->
+<!--[116.405289, 39.904987],-->
+<!--[113.964458, 40.54664],-->
+<!--[111.47836, 41.135964],-->
+<!--[108.949297, 41.670904],-->
+<!--[106.380111, 42.149509],-->
+<!--[103.774185, 42.56996],-->
+<!--[101.135432, 42.930601],-->
+<!--[98.46826, 43.229964],-->
+<!--[95.777529, 43.466798],-->
+<!--[93.068486, 43.64009],-->
+<!--[90.34669, 43.749086],-->
+<!--[87.61792, 43.793308]-->
+<!--]-->
+<!--}]);-->
+
+<!--//对第一条线路（即索引 0）创建一个巡航器-->
+<!--var navg1 = pathSimplifierIns.createPathNavigator(0, {-->
+<!--loop: true, //循环播放-->
+<!--speed: 1000000 //巡航速度，单位千米/小时-->
+<!--});-->
+
+<!--navg1.start();-->
+<!--});-->
+<!--</script>-->
+<script type="text/javascript">
+
+    var map = new AMap.Map('map-container', {
+        resizeEnable: true
+    });
+    var appElement = document.querySelector('[ng-controller=navController]');
+    //获取$scope变量
+    var $scope = angular.element(appElement).scope();
+
+    var fenceMarkers = [];
+    var i = 0;
+
+    var contextMenu = new AMap.ContextMenu();  //创建标记右键菜单
+    var mapMenu = new AMap.ContextMenu();  //创建地图右键菜单
+
+    map.on("rightclick", function (e) {
+        mapMenu.open(map, e.lnglat);
+        position = e.lnglat;
+    });
+    map.on("click", function (e) {
+        document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
+    });
+
+    contextMenu.addItem("显示历史轨迹", function (e) {
+        $scope.getHistoryTracks(extData);
+
+    });
+
+    contextMenu.addItem("移除标记", function (e) {
+        content.hide();
+        var m = 0;
+        console.log("content:"+content);
+        for(;m<fenceMarkers.length;m++){
+            console.log(fenceMarkers[m]);
+            if (content === fenceMarkers[m]){
+                fenceMarkers.splice(m,1);
+                $scope.fenceList.splice(m,1);
+                i = i-1;
+                break;
+            }
+        }
+    });
+
+    contextMenu.addItem("添加电子围栏", function (e) {
+        map.setZoomAndCenter(18, extData.lnglat);
+        main.data.chosenUser = extData.name;
+        // 获取指定点的围栏信息
+        //
+        $scope.getFence(extData.name);
+
+    });
+
+    mapMenu.addItem("添加标记", function (e) {
+        fenceMarkers[i] = new AMap.Marker({
+            position: position,
+            icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_r.png",
+            map: map
+        });
+        $scope.fenceList[i]={'id':'','lnglat':position};
+        i = i + 1;
+    });
+
+    mapMenu.addItem("完成标记", function (e) {
+        // TODO:上传 fenceMarkers
+        $scope.updateFence(main.data.chosenUser,$scope.fenceList);
+        // 隐藏节点
+        var m = 0;
+        var fenceTracks = []
+        for (;m<fenceMarkers.length;m++) {
+            fenceTracks[m] = fenceMarkers[m].getPosition();
+            fenceMarkers[m].hide();
+        }
+        fenceTracks[m] = fenceTracks[0];
+        // 绘制围栏
+        showHistoryTrack(fenceTracks,false);
+    });
+
+    $(document).ready(function () {
+        initialize($scope.interestList, "b");
+    });
+
+    //initialize
+    function initialize(e, flag) {
+        var markers = [];
+        var list = e;
+        for (var i = 0; i < list.length; i += 1) {
+            markers[i] = new AMap.Marker({
+                position: list[i].lnglat,
+                title: list[i].name,
+                extData: list[i],
+                icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_" + flag + ".png",
+                map: map
+            });
+            addMarkerListener(markers[i]);
+        }
+        return markers;
+    }
+
+    function addMarkerListener(marker) {
+        marker.on('rightclick', function (e) {
+            contextMenu.open(map, e.lnglat);
+            contextMenuPositon = e.lnglat;
+            clickedPoint = this;
+            extData = this.getExtData();
+            content = this;
+        });
+    }
+
+
+    //
+    function showHistoryTrack(tracks,flag) {
+        AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function (PathSimplifier, $) {
+
+            if (!PathSimplifier.supportCanvas) {
+                alert('当前环境不支持 Canvas！');
+                return;
+            }
+
+            var pathSimplifierIns = new PathSimplifier({
+                zIndex: 100,
+                //autoSetFitView:false,
+                map: map, //所属的地图实例
+
+                getPath: function (pathData, pathIndex) {
+
+                    return pathData.path;
+                },
+                getHoverTitle: function (pathData, pathIndex, pointIndex) {
+
+                    if (pointIndex >= 0) {
+                        //point
+                        return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
+                    }
+
+                    return pathData.name + '，点数量' + pathData.path.length;
+                },
+                renderOptions: {
+
+                    renderAllPointsIfNumberBelow: 100 //绘制路线节点，如不需要可设置为-1
+                }
+            });
+
+            window.pathSimplifierIns = pathSimplifierIns;
+
+            //设置数据
+            pathSimplifierIns.setData([{
+                name: '路线0',
+                path: tracks
+            }]);
+
+            if(flag){
+                var navg1 = pathSimplifierIns.createPathNavigator(0, {
+                    loop: true, //循环播放
+                    speed: 100 //巡航速度，单位千米/小时
+                });
+
+                navg1.start();
+            }
+        });
+    }
+
+
+</script>
+
+
+<!--// 使用刚指定的配置项和数据显示图表。-->
+<!--myChart.setOption(option);-->
+<!--};-->
+
+<!--main.fun.resourceImageinit = function(data) {-->
+<!--var resourceImage = $("#resourceImage");-->
+<!--var width = $(resourceImage).width();-->
+<!--$(resourceImage).css('width', width);-->
+<!--$(resourceImage).css('height', width);-->
+<!--// 基于准备好的dom，初始化echarts实例-->
+<!--var myChart = echarts.init(document.getElementById('resourceImage'));-->
+
+<!--// 指定图表的配置项和数据-->
+<!--var option = {-->
+<!--backgroundColor: '#2c343c',-->
+
+<!--tooltip: {-->
+<!--trigger: 'item',-->
+<!--formatter: "{a} <br/>{b} : {c} ({d}%)"-->
+<!--},-->
+
+<!--visualMap: {-->
+<!--show: false,-->
+<!--min: 80,-->
+<!--max: 18000,-->
+<!--inRange: {-->
+<!--colorLightness: [0, 1]-->
+<!--}-->
+<!--},-->
+<!--series: [{-->
+<!--name: '不良资源种类',-->
+<!--type: 'pie',-->
+<!--radius: '55%',-->
+<!--center: ['50%', '50%'],-->
+<!--data: data.sort(function(a, b) {-->
+<!--return a.value - b.value;-->
+<!--}),-->
+<!--roseType: 'radius',-->
+<!--label: {-->
+<!--normal: {-->
+<!--textStyle: {-->
+<!--color: 'rgba(255, 255, 255, 0.3)'-->
+<!--}-->
+<!--}-->
+<!--},-->
+<!--labelLine: {-->
+<!--normal: {-->
+<!--lineStyle: {-->
+<!--color: 'rgba(255, 255, 255, 0.3)'-->
+<!--},-->
+<!--smooth: 0.2,-->
+<!--length: 10,-->
+<!--length2: 20-->
+<!--}-->
+<!--},-->
+<!--itemStyle: {-->
+<!--normal: {-->
+<!--color: '#c23531',-->
+<!--shadowBlur: 200,-->
+<!--shadowColor: 'rgba(0, 0, 0, 0.5)'-->
+<!--}-->
+<!--},-->
+
+<!--animationType: 'scale',-->
+<!--animationEasing: 'elasticOut',-->
+<!--animationDelay: function(idx) {-->
+<!--return Math.random() * 200;-->
+<!--}-->
+<!--}]-->
+<!--};-->
+
+<!--// 使用刚指定的配置项和数据显示图表。-->
+<!--myChart.setOption(option);-->
+<!--};-->
+
+<!--main.fun.mapImageinit = function(data) {-->
+<!--var DHTImage = $("#DHTImage");-->
+<!--var width = $(DHTImage).width();-->
+<!--$(DHTImage).css('width', width);-->
+<!--$(DHTImage).css('height', width * 0.618);-->
+<!--// 基于准备好的dom，初始化echarts实例-->
+<!--var myChart = echarts.init(document.getElementById('DHTImage'));-->
+
+<!--var DHTlist = ['router.bittorrent.com', 'dht.transmissionbt.com', 'router.utorrent.com'];-->
+
+<!--// 指定图表的配置项和数据-->
+<!--var option = {-->
+<!--legend: {-->
+<!--data: DHTlist-->
+<!--},-->
+<!--series: [{-->
+<!--type: 'graph',-->
+<!--layout: 'force',-->
+<!--animation: false,-->
+<!--label: {-->
+<!--normal: {-->
+<!--position: 'right',-->
+<!--formatter: '{b}'-->
+<!--}-->
+<!--},-->
+<!--draggable: true,-->
+<!--data: data.map(function(e, index) {-->
+<!--return {-->
+<!--id: index,-->
+<!--name: e,-->
+<!--value: 1,-->
+<!--category: Math.floor(Math.random() * 4)-->
+<!--};-->
+<!--}),-->
+<!--categories: DHTlist.map(function(e) {-->
+<!--return {-->
+<!--"name": e,-->
+<!--"keyword": {},-->
+<!--"base": e-->
+<!--};-->
+<!--}),-->
+<!--force: {-->
+<!--// initLayout: 'circular'-->
+<!--// repulsion: 20,-->
+<!--edgeLength: 5,-->
+<!--repulsion: 20,-->
+<!--gravity: 0.2-->
+<!--},-->
+<!--edges: (function() {-->
+<!--var list = [];-->
+<!--// for (var i = 0; i < DHTlist.length; i++) {-->
+<!--//   for (var k = 1; k < data.length / 3; k++) {-->
+<!--//     list.push({-->
+<!--//       source: i,-->
+<!--//       target: k + 100 * i-->
+<!--//     });-->
+<!--//   }-->
+<!--// }-->
+<!--for (var index in data) {-->
+<!--if (data.hasOwnProperty(index)) {-->
+<!--list.push({-->
+<!--source: index,-->
+<!--target: Math.floor(Math.random() * 4) + 1-->
+<!--});-->
+<!--}-->
+<!--};-->
+<!--for (var i = 0; i < Math.floor(Math.random() * 100); i++) {-->
+<!--list.push({-->
+<!--source: Math.floor(Math.random() * 100),-->
+<!--target: Math.floor(Math.random() * 100)-->
+<!--});-->
+<!--};-->
+<!--console.log(list);-->
+<!--return list;-->
+<!--})()-->
+<!--}]-->
+<!--};-->
+
+<!--// 使用刚指定的配置项和数据显示图表。-->
+<!--myChart.setOption(option);-->
+<!--main.fun.loadend();-->
+<!--};-->
+
+<!--main.fun.allImageinit = function(data) {-->
+<!--var allImage = $("#allImage");-->
+<!--var width = $(allImage).width();-->
+<!--$(allImage).css('width', width);-->
+<!--$(allImage).css('height', width);-->
+<!--// 基于准备好的dom，初始化echarts实例-->
+<!--var myChart = echarts.init(document.getElementById('allImage'));-->
+
+<!--// 指定图表的配置项和数据-->
+<!--var option = {-->
+<!--title: {-->
+<!--text: '直播监控数量',-->
+<!--subtext: '数据更新于2017/7/27'-->
+<!--},-->
+<!--tooltip: {-->
+<!--trigger: 'axis',-->
+<!--axisPointer: {-->
+<!--type: 'shadow'-->
+<!--}-->
+<!--},-->
+<!--legend: {-->
+<!--data: ['监控数量']-->
+<!--},-->
+<!--grid: {-->
+<!--left: '3%',-->
+<!--right: '4%',-->
+<!--bottom: '3%',-->
+<!--containLabel: true-->
+<!--},-->
+<!--xAxis: {-->
+<!--type: 'value',-->
+<!--boundaryGap: [0, 0.01]-->
+<!--},-->
+<!--yAxis: {-->
+<!--type: 'category',-->
+<!--data: ['斗鱼', '丝足伊人', '花椒', '虎牙', 'YY']-->
+<!--},-->
+<!--series: [{-->
+<!--name: '监控总数',-->
+<!--type: 'bar',-->
+<!--data: [234, 290, 104, 131, 130]-->
+<!--}]-->
+<!--};-->
+
+<!--// 使用刚指定的配置项和数据显示图表。-->
+<!--myChart.setOption(option);-->
+<!--};-->
+
+<!--$.ajax({-->
+<!--url: main.data.url + 'overview_node/',-->
+<!--success: function(response) {-->
+<!--var data = [{-->
+<!--value: response['node1'],-->
+<!--name: '100%~80%'-->
+<!--}, {-->
+<!--value: response['node2'],-->
+<!--name: '80%~60%'-->
+<!--}, {-->
+<!--value: response['node3'],-->
+<!--name: '60%~40%'-->
+<!--}, {-->
+<!--value: response['node4'],-->
+<!--name: '40%~20%'-->
+<!--}];-->
+<!--main.fun.nodeImageinit(data);-->
+<!--$("#nodecount").html(response['node1'] + response['node2'] + response['node3'] + response['node4'] + response['node5']);-->
+<!--}-->
+<!--});-->
+
+<!--$.ajax({-->
+<!--url: main.data.url + 'overview_resource/',-->
+<!--success: function(response) {-->
+<!--var data = [{-->
+<!--value: response['sexy'],-->
+<!--name: '黄色信息'-->
+<!--}, {-->
+<!--value: response['vio'],-->
+<!--name: '暴恐信息'-->
+<!--}, {-->
+<!--value: response['anti'],-->
+<!--name: '政治敏感信息'-->
+<!--}];-->
+<!--main.fun.resourceImageinit(data);-->
+<!--$("#resourcecount").html(response['resource']);-->
+<!--}-->
+<!--});-->
+
+<!--$.ajax({-->
+<!--url: main.data.url + 'node_map/',-->
+<!--success: function(response) {-->
+<!--main.fun.mapImageinit(response);-->
+<!--}-->
+<!--});-->
+
+<!--main.fun.allImageinit();-->
+<!--</script>-->
+
+

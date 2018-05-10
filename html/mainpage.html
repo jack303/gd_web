@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GPS定位系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="This is the project from Stroy Book.">
+    <meta name="author" content="Jiayong Mo">
+    <link rel="icon" type="image/x-icon" href="../images/shield_32px_1199997_easyicon.net.ico">
+    <link rel="stylesheet" type="text/css" href="../css/animate.css">
+    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="../bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="../bower_components/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"/>
+    <!--map url-->
+    <link rel="stylesheet" type="text/css" href="../css/main1119.css"/>
+    <script type="text/javascript" src="../js/es5.min.js"></script>
+    <script src="http://webapi.amap.com/maps?v=1.4.5&key=c6266af1d43acdae16ac9c0428ed2abf"></script>
+    <!-- UI组件库 1.0 -->
+    <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+    <!--map url-->
+
+    <script type="text/javascript" src="../bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+    <script type="text/javascript"
+            src="../bower_components/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="../bower_components/echarts/dist/echarts.js"></script>
+    <script src="../bower_components/echarts/dist/extension/dataTool.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+
+</head>
+
+<body>
+<!--style="visibility: hidden"-->
+<div id="mainView"  ng-app="myApp" ng-controller="navController" ng-cloak>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Navbar Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><strong>定位系统</strong></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li><a onclick="main.fun.refresh();">刷新</a></li>
+                </ul>
+                <ul id="logininfo" class="nav navbar-nav navbar-right" style="margin-right: 20px"
+                    ng-class="{true:'animated fadeIn',false:'notshow'}[logresponse]">
+                    <!-- <li>
+                                <form class="navbar-form navbar-right">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Search">
+                                    </div>
+                                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button>
+                                </form>
+                            </li> -->
+                    <li>
+                        <a><strong id="nUsername">早上好:{{nUsername}}</strong></a>
+
+                    </li>
+                </ul>
+                <form id="loginForm" class="navbar-form navbar-right"
+                      ng-class="{false:'animated fadeIn',true:'notshow'}[logresponse]">
+                    <div class="form-group">
+                        <input type="text" placeholder="Email" ng-model="nUsername" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" ng-model="nPassword" class="form-control">
+                    </div>
+                    <button id="loginmsg" ng-click="login()" class="btn btn-success" data-toggle="popover"
+                            data-trigger="focus">登录
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div ng-class="{true:'col-sm-3 col-md-2 sidebar animated fadeInLeft',false:'animated fadeOutLeft'}[sidebarflag]"
+                 ng-show="sidebarflag">
+                <ul id="sidebar-list" class="nav nav-sidebar">
+                    <li class="active"><a href="#" ng-click="getInterest(nUsername)">显示当前位置<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li><a href="#/实时分析" ng-click="getMessage(nUsername,1)"><i class="glyphicon glyphicon-registration-mark pull-right"></i> 消息列表</a></li>
+                    <li id="dashboard-setting"><a ng-click="getInterest(nUsername)" href="#/系统统置"><i
+                            class="glyphicon glyphicon-cog pull-right"></i>我的关注</a></li>
+                </ul>
+            </div>
+            <div ng-class="{true:'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main',false:'col-md-12'}[sidebarflag]">
+                <!--Main view -->
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div ng-view></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <center>
+            <div class="modal-content">
+                <div class="modal-header">
+                    正在获取数据
+                </div>
+                <div class="modal-body">
+                    <span class="glyphicon glyphicon-refresh icon-spin"></span>正在加载……
+                </div>
+            </div>
+        </center>
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    var main = {};
+
+    main.auth = {};
+    main.data = {};
+    main.fun = {};
+    main.data.chosenUser = '';
+    main.data.messagePage = 1;
+    main.fun.country = function () {
+        return 'China'
+    };
+    main.auth.admin = function () {
+        $("#dashboard-setting").show();
+    };
+    main.fun.pureRant = function () {
+        return (((this.resourse - (this.sexy + this.violet + this.policy)) / this.resourse) * 100).toFixed(2);
+    };
+    main.data.url = 'http://localhost:8080/';
+    main.fun.loadstart = function () {
+        $('#loadingModal').modal('show');
+    };
+    main.fun.loadend = function () {
+        $('#loadingModal').modal('hide');
+    }
+    main.fun.refresh = function () {
+        $("#sidebar-list").children(".active").children().click();
+    }
+    $(document).ready(function () {
+        // 侧边导航栏点击高亮动画
+        $("#sidebar-list").children("li").on("click", function (e) {
+            $(this).parent().children("li").removeClass("active");
+            $(this).addClass("active");
+        });
+        // initialize
+    $("#sidebar-list").children(".active").children().click();
+    });
+</script>
+<script src="../js/app-init.js"></script>
+<script src="../js/pageinfo.js"></script>
+<script type="text/javascript">
+    // init
+</script>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="icon" type="image/x-icon" href="../images/shield_32px_1199997_easyicon.net.ico">
+    <link rel="stylesheet" type="text/css" href="../css/animate.css">
+    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="../bower_components/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"/>-->
+    <script type="text/javascript" src="../bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+    <!--<script type="text/javascript" src="../bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>-->
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-route/angular-route.js"></script>
+    <script  src="../bower_components/echarts/dist/echarts.js"></script>
+    <script src="../bower_components/echarts/dist/extension/dataTool.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <script src="../bower_components/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/animate.css"/>
+</head>
+<body>
+<!-- Modal for live detail -->
+<button id="show" class="btn btn-success">Open</button>
+<button id="hide" class="btn btn-danger">Close</button>
+<div class="modal  fade" id="blockResult" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center text-info" id="myModalLabel2"><strong>屏蔽结果</strong></h3>
+            </div>
+            <div class="modal-body">
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <a href="#">
+                            <img class="media-object" src="../images/Success_128px_1194837_easyicon.net.png" alt="label">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h2 style="padding: 20px 0;"><strong style="padding-left: 70px">屏蔽成功</strong></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("#show").click(function () {
+     $("#liveModal").modal('show');
+    });
+
+
+</script>
+</html>
